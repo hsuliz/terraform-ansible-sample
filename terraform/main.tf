@@ -27,7 +27,7 @@ resource "aws_vpc_security_group_egress_rule" "server" {
   ip_protocol = "-1"
 }
 
-resource "aws_vpc_security_group_ingress_rule" "server_ssh" {
+resource "aws_vpc_security_group_ingress_rule" "server_allow_ssh" {
   security_group_id = aws_security_group.server.id
 
   cidr_ipv4   = "0.0.0.0/0"
@@ -36,7 +36,7 @@ resource "aws_vpc_security_group_ingress_rule" "server_ssh" {
   to_port     = 22
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_http" {
+resource "aws_vpc_security_group_ingress_rule" "server_allow_http" {
   security_group_id = aws_security_group.server.id
 
   cidr_ipv4   = "0.0.0.0/0"
@@ -45,7 +45,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   to_port     = 80
 }
 
-resource "aws_instance" "this" {
+resource "aws_instance" "server" {
   ami           = "ami-0e54671bdf3c8ed8d" // Amazon Linux 2023
   instance_type = "t2.micro"
   key_name      = "oei-key-pair"
