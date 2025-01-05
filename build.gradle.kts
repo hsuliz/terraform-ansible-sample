@@ -7,15 +7,13 @@ group = "dev.hsuliz"
 version = "0.0.1"
 
 application {
-  mainClass.set("io.ktor.server.netty.EngineMain")
+  mainClass.set("dev.hsuliz.ApplicationKt")
 
   val isDevelopment: Boolean = project.ext.has("development")
   applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
-repositories {
-  mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
   implementation(libs.ktor.server.core)
