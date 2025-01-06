@@ -14,8 +14,10 @@ on:
           - patch
 
 jobs:
-  push_to_dockerhub:
+  promote:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -30,14 +32,14 @@ jobs:
       - name: Test
         run: ./gradlew test --no-daemon
 
+      - name: Increment version
+        id: incremented_version
+        run: |
+          NEW_VERSION=$(./gradlew incrementVersion {{ github.event.inputs.version }} -q)
+          echo "new_version=NEW_VERSION" >> $GITHUB_OUTPUT
+
       - name: Build fat Jar
         run: ./gradlew buildFatJar --no-daemon
-
-      - name: Get version
-        id: version
-        run: |
-          VERSION=$(./gradlew getVersion -q)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -47,5 +49,10 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:{{ steps.increment_version.outputs.incremented_version }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:{{ steps.increment_version.outputs.incremented_version }}
+
+      - name: Commit updated version
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Version update to {{ steps.increment_version.outputs.incremented_version }}

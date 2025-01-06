@@ -47,7 +47,7 @@ abstract class IncrementVersionTask : DefaultTask() {
   @TaskAction
   fun execute() {
     val buildFileContent = project.buildFile.readText()
-
+    lateinit var newVersion: String
     val versionRegex = "version\\s*=\\s*\"(\\d+)\\.(\\d+)\\.(\\d+)\"".toRegex()
     val updatedContent =
         versionRegex.replace(buildFileContent) {
@@ -61,12 +61,12 @@ abstract class IncrementVersionTask : DefaultTask() {
                 VersionType.MINOR -> Triple(major, minor + 1, 0)
                 VersionType.PATCH -> Triple(major, minor, patch + 1)
               }
-
+          newVersion = "$newMajor.$newMinor.$newPatch"
           "version = \"$newMajor.$newMinor.$newPatch\""
         }
 
     project.buildFile.writeText(updatedContent)
-    println("Version incremented")
+    println(newVersion)
   }
 }
 
