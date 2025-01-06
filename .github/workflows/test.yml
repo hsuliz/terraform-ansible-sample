@@ -1,4 +1,4 @@
-name: build
+name: test
 
 on:
   pull_request:
@@ -6,7 +6,6 @@ on:
       - main
   #push:
   workflow_dispatch:
-  workflow_call:
 
 jobs:
   build:
@@ -24,6 +23,3 @@ jobs:
 
       - name: Test
         run: ./gradlew test --no-daemon
-
-      - name: Build fat Jar
-        run: ./gradlew buildFatJar --no-daemon
