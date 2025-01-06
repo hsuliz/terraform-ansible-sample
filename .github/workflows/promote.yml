@@ -33,7 +33,7 @@ jobs:
         run: ./gradlew test --no-daemon
 
       - name: Increment version
-        id: incremented_version
+        id: increment_version
         run: |
           NEW_VERSION=$(./gradlew incrementVersion --versionType=${{ github.event.inputs.version }} -q)
           echo "new_version=NEW_VERSION" >> $GITHUB_OUTPUT
@@ -49,7 +49,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ steps.increment_version.outputs.incremented_version }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ steps.increment_version.outputs.new_version }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ steps.increment_version.outputs.incremented_version }}
 
       - name: Commit updated version
