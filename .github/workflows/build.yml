@@ -6,9 +6,10 @@ on:
       - main
   push:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -21,10 +22,19 @@ jobs:
           java-version: '21'
           cache: 'gradle'
 
-      - name: Build
-        run: ./gradlew build -x test --no-daemon
-
       - name: Test
         run: ./gradlew test --no-daemon
 
+      - name: Build fat Jar
+        run: ./gradlew buildFatJar --no-daemon
 
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(./gradlew getVersion -q)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: simple-automation-${{ steps.version.outputs.version }}.jar
+          path: build/libs/simple-automation-all.jar
