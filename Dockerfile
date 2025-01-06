@@ -2,7 +2,7 @@ FROM amazoncorretto:21-al2023-headless
 
 WORKDIR /app
 
-COPY web-server-*.jar ./
+COPY build/libs/web-server-*.jar ./
 
 EXPOSE 8080
 
