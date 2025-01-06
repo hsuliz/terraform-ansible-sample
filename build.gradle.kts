@@ -24,6 +24,8 @@ dependencies {
   testImplementation(libs.kotlin.test.junit)
 }
 
+ktor { fatJar { archiveFileName.set("web-server-$version.jar") } }
+
 tasks.register<Task>("getVersion") {
   description = "Prints the current project version"
   group = "versioning"
@@ -69,6 +71,7 @@ abstract class IncrementVersionTask : DefaultTask() {
 }
 
 tasks.register<IncrementVersionTask>("incrementVersion") {
-  description = "Increments the project version. Specify the version type via --versionType=major|minor|patch"
+  description =
+      "Increments the project version. Specify the version type via --versionType=major|minor|patch"
   group = "versioning"
 }
