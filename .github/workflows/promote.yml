@@ -36,7 +36,7 @@ jobs:
         id: increment_version
         run: |
           NEW_VERSION=$(./gradlew incrementVersion --versionType=${{ github.event.inputs.version }} -q)
-          echo "incremented_version=NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "incremented_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Build fat Jar
         run: ./gradlew buildFatJar --no-daemon
