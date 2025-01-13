@@ -35,8 +35,8 @@ jobs:
         id: version-step
         if: github.ref_name == 'main'
         run: |
-          echo 'version=$(./gradlew getVersion -q)' >> $GITHUB_OUTPUT
-          echo 'git-hash=$(git rev-parse --short HEAD)' >> $GITHUB_OUTPUT
+          echo "version=$(./gradlew getVersion -q)" >> $GITHUB_OUTPUT
+          echo "git-hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
         id: upload-artifact-step
