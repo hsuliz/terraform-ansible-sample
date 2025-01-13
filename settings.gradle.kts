@@ -1,1 +1,1 @@
-rootProject.name = "simple-automation"
+rootProject.name = "web-server"

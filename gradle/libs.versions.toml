@@ -2,6 +2,7 @@
 kotlin-version = "2.1.0"
 ktor-version = "3.0.3"
 logback-version = "1.4.14"
+ktfmt-version = "0.21.0"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor-version" }
@@ -14,3 +15,5 @@ kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
+ktfmt = {id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt-version"}
+

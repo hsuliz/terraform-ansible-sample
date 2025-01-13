@@ -1,10 +1,10 @@
 name: test
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
-  #push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -21,5 +21,18 @@ jobs:
           java-version: '21'
           cache: 'gradle'
 
+      - name: Lint
+        run: ./gradlew ktfmtCheck
+
       - name: Test
         run: ./gradlew test --no-daemon
+
+      - name: Build
+        run: ./gradlew buildFatJar
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build/libs/web-server-*-fat.jar

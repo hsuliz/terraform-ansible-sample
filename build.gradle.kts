@@ -1,9 +1,11 @@
 plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.ktor)
+  alias(libs.plugins.ktfmt)
 }
 
 group = "dev.hsuliz"
+
 version = "0.0.3"
 
 application {
@@ -24,7 +26,7 @@ dependencies {
   testImplementation(libs.kotlin.test.junit)
 }
 
-ktor { fatJar { archiveFileName.set("web-server-$version.jar") } }
+ktor { fatJar { archiveFileName.set("web-server-$version-fat.jar") } }
 
 tasks.register<Task>("getVersion") {
   description = "Prints the current project version"
