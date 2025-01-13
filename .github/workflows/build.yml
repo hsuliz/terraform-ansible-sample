@@ -45,6 +45,7 @@ jobs:
           name: web-server-${{ steps.version-step.outputs.version }}-${{ steps.version-step.outputs.git-hash }}-fat.jar
           path: build/libs/web-server-${{ steps.version-step.outputs.version }}-fat.jar
           if-no-files-found: error
+          overwrite: true
 
       - name: Workflow summary
         if: github.ref == 'refs/heads/main'
