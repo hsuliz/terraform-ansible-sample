@@ -1,15 +1,16 @@
-name: test
+name: build
 
 on:
   push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
+
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps. workflow-summary.outputs.artifact-name }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -32,14 +33,14 @@ jobs:
 
       - name: Version
         id: version-step
-        if: github.ref == 'refs/heads/main'
+        if: github.ref_name == "refs/heads/main"
         run: |
           echo "version=$(./gradlew getVersion -q)" >> $GITHUB_OUTPUT
           echo "git-hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
         id: artifact-upload-step
-        if: github.ref == 'refs/heads/main'
+        if: github.ref_name == "main"
         uses: actions/upload-artifact@v4
         with:
           name: web-server-${{ steps.version-step.outputs.version }}-${{ steps.version-step.outputs.git-hash }}-fat.jar
@@ -48,7 +49,13 @@ jobs:
           overwrite: true
 
       - name: Workflow summary
-        if: github.ref == 'refs/heads/main'
+        id: workflow-summary
+        if: github.ref_name == "main"
         run: |
+          
           echo "Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}" >> $GITHUB_STEP_SUMMARY
           echo "Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
+
+  push-to-registry:
+    needs: [ build ]
+    uses: ./.github/workflows/docker-build-push.yml

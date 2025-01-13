@@ -1,0 +1,14 @@
+name: docker-build-push
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+
+      - name: Check
+        run: ls -l
