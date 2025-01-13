@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: web-server-${{ steps.version-step.outputs.version }}-${{ steps.version-step.outputs.git-hash }}-fat.jar
-          path: build/libs/web-server-${{ steps.version-step.outputs.current-version }}-fat.jar
+          path: build/libs/web-server-${{ steps.version-step.outputs.version }}-fat.jar
           if-no-files-found: error
 
       - name: Workflow summary
