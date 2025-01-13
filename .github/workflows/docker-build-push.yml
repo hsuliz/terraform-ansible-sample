@@ -26,5 +26,13 @@ jobs:
       - name: Check
         run: ls -l
 
+      - name: Create Docker tag
+        id: docker-tag
+        run: |
+          output=""${{ inputs.artifact-name }}""
+          output="${output#*-}"
+          output="${output%.jar}"
+          echo "result=$output" >> $GITHUB_OUTPUT
+
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.artifact-name }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ steps.docker-tag.outputs.result }} .
