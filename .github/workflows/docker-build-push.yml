@@ -6,6 +6,9 @@ on:
       artifact-name:
         type: string
         required: true
+      version:
+        type: string
+        required: true
 
 jobs:
   build:
@@ -23,17 +26,6 @@ jobs:
             Dockerfile
           sparse-checkout-cone-mode: false
 
-      - name: Check
-        run: ls -l
-
-      - name: Create Docker tag
-        id: docker-tag
-        run: |
-          output=""${{ inputs.artifact-name }}""
-          output="${output#*-}"
-          output="${output%.jar}"
-          echo "result=$output" >> $GITHUB_OUTPUT
-
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -41,7 +33,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ steps.docker-tag.outputs.result }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.version }} .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ steps.docker-tag.outputs.result }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.version }}
