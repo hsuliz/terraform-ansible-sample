@@ -30,17 +30,19 @@ jobs:
       - name: Build
         run: ./gradlew buildFatJar
 
-      - name: Get version
+      - name: Version
         id: version-step
         if: github.ref == 'refs/heads/main'
-        run: echo "current-version=$(./gradlew getVersion -q)" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(./gradlew getVersion -q)" >> $GITHUB_OUTPUT
+          echo "git-hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
         id: artifact-upload-step
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
-          name: web-server-${{ steps.version-step.outputs.current-version }}-fat.jar
+          name: web-server-${{ steps.version-step.outputs.version }}-${{ steps.version-step.outputs.git-hash }}-fat.jar
           path: build/libs/web-server-${{ steps.version-step.outputs.current-version }}-fat.jar
           if-no-files-found: error
 
