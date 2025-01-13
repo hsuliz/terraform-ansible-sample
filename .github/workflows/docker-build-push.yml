@@ -6,7 +6,7 @@ on:
       artifact-name:
         type: string
         required: true
-      version:
+      artifact-version:
         type: string
         required: true
 
@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.version }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.artifact-version }} .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.version }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.artifact-version }}
