@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      artifact-name: ${{ steps. workflow-summary.outputs.artifact-name }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -52,10 +50,13 @@ jobs:
         id: workflow-summary
         if: github.ref_name == 'main'
         run: |
-          
           echo "Artifact ID is ${{ steps.upload-artifact-step.outputs.artifact-id }}" >> $GITHUB_STEP_SUMMARY
           echo "Artifact URL is ${{ steps.upload-artifact-step.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
+    outputs:
+      artifact-name: web-server-${{ steps.version-step.outputs.version }}-${{ steps.version-step.outputs.git-hash }}.jar
 
   push-to-registry:
     needs: [ build ]
     uses: ./.github/workflows/docker-build-push.yml
+    with:
+      artifact-name: ${{ needs.build.outputs.artifact-name }}

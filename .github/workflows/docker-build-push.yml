@@ -2,11 +2,20 @@ name: docker-build-push
 
 on:
   workflow_call:
+    inputs:
+      artifact-name:
+        type: string
+        required: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+
       - name: Download Dockerfile
         uses: actions/checkout@v4
         with:
@@ -14,11 +23,8 @@ jobs:
             Dockerfile
           sparse-checkout-cone-mode: false
 
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-
       - name: Check
         run: ls -l
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:test-name .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.artifact-name }} .
