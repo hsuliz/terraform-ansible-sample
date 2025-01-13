@@ -42,5 +42,4 @@ jobs:
       - name: Add workflow summary
         if: github.ref == 'refs/heads/main'
         run: |
-          echo "## Test Summary" >> $GITHUB_STEP_SUMMARY
           echo "Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}" >> $GITHUB_STEP_SUMMARY
