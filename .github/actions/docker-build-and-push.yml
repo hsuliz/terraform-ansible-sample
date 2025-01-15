@@ -1,18 +1,33 @@
-name: docker-build-and-push
+name: Docker build and push
 description: Builds and pushes docker image
 
 inputs:
   image-version:
     required: true
-    description: version of docker image to push
+    description: Version of docker image to push
 
 runs:
   using: "composite"
   steps:
+    - name: Get version
+      id: get-version
+      shell: bash
+      run: |
+        version=$(./gradlew getVersion -q)
+        gitHash=$(git rev-parse --short HEAD)
+        fullVersion="$version"-"$gitHash"
+        echo "it=""$fullVersion""" >> $GITHUB_OUTPUT
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
     - name: Build Docker image
       shell: bash
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.image-version}} .
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ steps.get-version.outputs.it }} .
 
     - name: Push Docker image
       shell: bash
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ inputs.image-version }}
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/simple-automation:${{ steps.get-version.outputs.it }}

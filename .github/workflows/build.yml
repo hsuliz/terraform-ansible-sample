@@ -25,46 +25,20 @@ jobs:
           cache: 'gradle'
 
       - name: Lint
-        run: ./gradlew ktfmtCheck
+        run: ./gradlew ktfmtCheck --no-daemon
 
       - name: Test
         run: ./gradlew test --no-daemon
 
       - name: Build
-        run: ./gradlew buildFatJar
+        run: ./gradlew buildFatJar --no-daemon
 
-      - name: Version
-        id: version-step
+      - uses: .github/actions/docker-build-and-push.yml
         if: github.ref_name == 'main'
-        run: |
-          echo "version=$(./gradlew getVersion -q)" >> $GITHUB_OUTPUT
-          echo "git-hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Upload artifact
-        id: upload-artifact-step
-        if: github.ref_name == 'main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-server-${{ steps.version-step.outputs.version }}-${{ steps.version-step.outputs.git-hash }}.jar
-          path: build/libs/web-server-${{ steps.version-step.outputs.version }}.jar
-          if-no-files-found: error
-          overwrite: true
+        #run: |
+        #  echo "version=$(./gradlew getVersion -q)" >> $GITHUB_OUTPUT
+        #  echo "git-hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Workflow summary
-        id: workflow-summary
-        if: github.ref_name == 'main'
-        run: |
-          echo "Artifact ID is ${{ steps.upload-artifact-step.outputs.artifact-id }}" >> $GITHUB_STEP_SUMMARY
-          echo "Artifact URL is ${{ steps.upload-artifact-step.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
-    outputs:
-      artifact-name: web-server-${{ steps.version-step.outputs.version }}-${{ steps.version-step.outputs.git-hash }}.jar
-      artifact-version: ${{ steps.version-step.outputs.version }}-${{ steps.version-step.outputs.git-hash }}
 
-  push-to-registry:
-    needs: [ build ]
-    if: github.ref_name == 'main'
-    uses: ./.github/workflows/docker-build-push.yml
-    with:
-      artifact-name: ${{ needs.build.outputs.artifact-name }}
-      artifact-version: ${{ needs.build.outputs.artifact-version }}
-    secrets: inherit
+
