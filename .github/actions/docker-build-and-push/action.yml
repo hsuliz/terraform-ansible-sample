@@ -29,8 +29,8 @@ runs:
 
     - name: Build Docker image
       shell: bash
-      run: docker build -t ${{ inputs.docker-password }}/simple-automation:${{ steps.get-version.outputs.it }} .
+      run: docker build -t ${{ inputs.docker-username }}/simple-automation:${{ steps.get-version.outputs.it }} .
 
     - name: Push Docker image
       shell: bash
-      run: docker push ${{ inputs.docker-password }}/simple-automation:${{ steps.get-version.outputs.it }}
+      run: docker push ${{ inputs.docker-username }}/simple-automation:${{ steps.get-version.outputs.it }}
