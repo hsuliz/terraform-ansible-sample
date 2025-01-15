@@ -1,4 +1,4 @@
-name: build
+name: Build
 
 on:
   workflow_dispatch:
@@ -35,6 +35,9 @@ jobs:
 
       - name: Docker build and push
         uses: ./.github/actions/docker-build-and-push
+        with:
+          docker-username: ${{ secrets.DOCKER_USERNAME }}
+          docker-password: ${{ secrets.DOCKER_PASSWORD }}
         if: github.ref_name == 'main'
 
         #run: |
