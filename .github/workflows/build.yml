@@ -33,7 +33,7 @@ jobs:
       - name: Build
         run: ./gradlew buildFatJar --no-daemon
 
-      - uses: .github/actions/docker-build-and-push.yml
+      - uses: ./.github/actions/docker-build-and-push
         if: github.ref_name == 'main'
 
         #run: |
