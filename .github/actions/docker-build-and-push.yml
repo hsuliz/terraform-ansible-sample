@@ -1,11 +1,6 @@
 name: Docker build and push
 description: Builds and pushes docker image
 
-inputs:
-  image-version:
-    required: true
-    description: Version of docker image to push
-
 runs:
   using: "composite"
   steps:
