@@ -34,15 +34,8 @@ jobs:
         run: ./gradlew buildFatJar --no-daemon
 
       - name: Docker build and push
+        if: github.ref_name == 'main'
         uses: ./.github/actions/docker-build-and-push
         with:
           docker-username: ${{ secrets.DOCKER_USERNAME }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
-        if: github.ref_name == 'main'
-
-        #run: |
-        #  echo "version=$(./gradlew getVersion -q)" >> $GITHUB_OUTPUT
-        #  echo "git-hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-
-
