@@ -61,7 +61,7 @@ jobs:
 
       - name: Push Docker image
         shell: bash
-        run: docker push ${{ inputs.docker-username }}/simple-automation:${{ steps.increment-version.outputs.incremented-version }}
+        run: docker push hsuliz/simple-automation:${{ steps.increment-version.outputs.incremented-version }}
 
       - name: Commit updated version
         uses: stefanzweifel/git-auto-commit-action@v5

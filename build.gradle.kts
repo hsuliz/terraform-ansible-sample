@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.hsuliz"
-version = "0.0.4"
+version = "0.0.3"
 
 application {
   mainClass.set("dev.hsuliz.ApplicationKt")
