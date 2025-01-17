@@ -2,13 +2,14 @@ name: Build
 
 on:
   workflow_dispatch:
-  push:
-    paths-ignore:
-      - .github/**
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - .github/**
+  #push:
+  #  paths-ignore:
+  #    - .github/**
+  #    - build.gradle.kts
+  #pull_request:
+  #  branches: [ main ]
+  #  paths-ignore:
+  #    - .github/**
 
 jobs:
   Build:

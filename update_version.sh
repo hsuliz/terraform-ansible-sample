@@ -36,5 +36,7 @@ case "$UPDATE_TYPE" in
 esac
 
 NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
-sed -i '' "s/^version = \"[0-9.]*\"/version = \"$NEW_VERSION\"/" "$FILE"
+# For mac os
+#sed -i '' "s/^version = \"[0-9.]*\"/version = \"$NEW_VERSION\"/" "$FILE"
+sed -i "s/^version = \"[0-9.]*\"/version = \"$NEW_VERSION\"/" "$FILE"
 echo "$NEW_VERSION"

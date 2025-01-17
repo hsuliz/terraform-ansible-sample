@@ -14,7 +14,7 @@ on:
           - patch
 
 jobs:
-  release:
+  Release:
     if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     permissions:
