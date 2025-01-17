@@ -14,7 +14,7 @@ on:
           - patch
 
 jobs:
-  promote:
+  release:
     if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     permissions:
@@ -51,7 +51,7 @@ jobs:
       - name: Increment version
         id: increment-version
         run: |
-          NEW_VERSION=$(./gradlew incrementVersion --versionType=${{ github.event.inputs.version }} -q)
+          NEW_VERSION=$(bash ./update_version.sh ${{ github.event.inputs.version }})
           echo "incremented-version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Re-tag with new version
