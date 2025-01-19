@@ -1,5 +1,0 @@
-bucket     = "simple-automation"
-key        = "terraform-state/terraform.tfstate"
-region     = REGION
-access_key = ACCESS_KEY
-secret_key = SECRET_KEY
