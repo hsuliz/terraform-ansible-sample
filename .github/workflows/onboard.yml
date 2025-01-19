@@ -19,9 +19,9 @@ jobs:
       - name: Populate state config
         working-directory: ./terraform
         run: |
-          sed -i "s/REGION/\"${TF_VAR_aws_region}\"/" state.config.tmp
-          sed -i "s/ACCESS_KEY/\"${TF_VAR_aws_access_key}\"/" state.config.tmp
-          sed -i "s/SECRET_KEY/\"${TF_VAR_aws_secret_key}\"/" state.config.tmp
+          sed -i "s|REGION|\"$TF_VAR_aws_region\"|" state.config.tmp
+          sed -i "s|ACCESS_KEY|\"$TF_VAR_aws_access_key\"|" state.config.tmp
+          sed -i "s|SECRET_KEY|\"$TF_VAR_aws_secret_key\"|" state.config.tmp
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
