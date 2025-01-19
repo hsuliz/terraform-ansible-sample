@@ -27,7 +27,11 @@ jobs:
 
       - name: Terraform init
         working-directory: ./terraform
-        run: terraform init
+        run: |
+          terraform init \
+            -backend-config="bucket=simple-automation" \
+            -backend-config="key=terraform/terraform.tfstate" \
+            -backend-config="region=${{ secrets.AWS_REGION }}"
 
       - name: Terraform apply
         id: terraform-apply
