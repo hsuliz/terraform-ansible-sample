@@ -1,0 +1,6 @@
+---
+- name: Configure new instance
+  hosts: myhosts
+  become: yes
+  roles:
+    - install_docker

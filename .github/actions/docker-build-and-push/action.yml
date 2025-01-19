@@ -16,7 +16,7 @@ runs:
       id: get-version
       shell: bash
       run: |
-        version=$(./gradlew getVersion -q)
+        version=$(awk -F'"' '/^version =/ {print $2}' build.gradle.kts)
         gitHash=$(git rev-parse --short HEAD)
         fullVersion="$version"-"$gitHash"
         echo "it=""$fullVersion""" >> $GITHUB_OUTPUT

@@ -13,4 +13,3 @@ variable "aws_secret_key" {
 variable "aws_vpc_id" {
   type = string
 }
-

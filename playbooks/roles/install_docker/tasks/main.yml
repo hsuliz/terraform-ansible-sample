@@ -1,0 +1,16 @@
+---
+- name: Install Docker
+  dnf:
+    name: docker
+    state: present
+
+- name: Start and enable Docker service
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Verify Docker installation
+  command: docker info
+  register: docker_info_output
+  failed_when: "'Server Version' not in docker_info_output.stdout"
