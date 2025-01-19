@@ -27,13 +27,13 @@ jobs:
 
       - name: Terraform init
         working-directory: ./terraform
-        run: terraform init -backend-config="./state.config.tmp"
+        run: terraform init
 
       - name: Terraform apply
+        id: terraform-apply
         working-directory: ./terraform
         run: terraform apply -auto-approve
 
-      - name: Terraform apply
-        working-directory: ./terraform
-        run: terraform apply -auto-approve
+      - name: Get EC2 IP address
+        run: echo "${{ steps.terraform-apply.outputs.ec2_ip }}"
 

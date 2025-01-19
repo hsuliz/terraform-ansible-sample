@@ -40,7 +40,6 @@ out/
 /terraform/myKey.pem
 /terraform/terraform.tfstate
 /terraform/terraform.tfstate.backup
-/terraform/local-state.config
 
 /.idea/
 /.kotlin/
