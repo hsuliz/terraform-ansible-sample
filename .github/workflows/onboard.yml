@@ -5,11 +5,11 @@ on:
 
 jobs:
   Onboard:
-    #env:
-    #  TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
-    #  TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-    #  TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
-    #  TF_VAR_aws_vpc_id: ${{ secrets.AWS_VPC_ID }}
+    env:
+      TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+      TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+      TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+      TF_VAR_aws_vpc_id: ${{ secrets.AWS_VPC_ID }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -30,14 +30,26 @@ jobs:
         run: |
           terraform init \
             -backend-config="bucket=simple-automation" \
-            -backend-config="key=terraform/terraform.tfstate" \
+            -backend-config="key=automation/terraform/terraform.tfstate" \
             -backend-config="region=${{ secrets.AWS_REGION }}"
 
       - name: Terraform apply
-        id: terraform-apply
         working-directory: ./terraform
         run: terraform apply -auto-approve
 
-      - name: Get EC2 IP address
-        run: echo "${{ steps.terraform-apply.outputs.ec2_ip }}"
+      - name: Add generated Ansible inventory
+        run: mv terraform/inventory playbooks
 
+      - name: Add ssh key to Ansible playbooks
+        run: |
+          mv terraform/oei-key-pair.pem playbooks
+          chmod 400 "playbooks/oei-key-pair.pem"      
+
+      - name: Ansible playbook
+        working-directory: ./playbooks
+        run: ansible-playbook -i inventory configure.yml
+
+      - name: Save resources to S3 bucket
+        run: |
+          aws s3 cp playbooks/inventory s3://simple-automation/automation/ansible
+          aws s3 cp playbooks/oei-key-pair.pem s3://simple-automation/automation

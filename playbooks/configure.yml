@@ -1,6 +1,6 @@
 ---
 - name: Configure new instance
-  hosts: myhosts
+  hosts: web-server
   become: yes
   roles:
     - install_docker
