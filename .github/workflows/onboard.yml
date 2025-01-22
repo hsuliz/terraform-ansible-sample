@@ -52,4 +52,4 @@ jobs:
       - name: Save resources to S3 bucket
         run: |
           aws s3 cp playbooks/inventory s3://simple-automation/automation/ansible/inventory
-          aws s3 cp terraform/oei-key-pair.pem s3://simple-automation/automation/oei-key-pair.pem
+          aws s3 cp playbooks/oei-key-pair.pem s3://simple-automation/automation/oei-key-pair.pem
