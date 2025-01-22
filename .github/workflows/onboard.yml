@@ -47,7 +47,7 @@ jobs:
 
       - name: Ansible playbook
         working-directory: ./playbooks
-        run: ansible-playbook -i inventory configure.yml --private-key private_key.pem
+        run: ansible-playbook -i inventory configure.yml --private-key oei-key-pair.pem
 
       - name: Save resources to S3 bucket
         run: |
