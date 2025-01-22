@@ -41,9 +41,7 @@ jobs:
         run: mv terraform/inventory playbooks
 
       - name: Add ssh key to Ansible playbooks
-        run: |
-          mv terraform/oei-key-pair.pem playbooks
-          chmod 400 "playbooks/oei-key-pair.pem"      
+        run: ssh-add terraform/oei-key-pair.pem
 
       - name: Ansible playbook
         working-directory: ./playbooks
@@ -51,5 +49,5 @@ jobs:
 
       - name: Save resources to S3 bucket
         run: |
-          aws s3 cp playbooks/inventory s3://simple-automation/automation/ansible
-          aws s3 cp playbooks/oei-key-pair.pem s3://simple-automation/automation
+          aws s3 cp playbooks/inventory s3://simple-automation/automation/ansible/inventory
+          aws s3 cp terraform/oei-key-pair.pem s3://simple-automation/automation/oei-key-pair.pem
