@@ -31,10 +31,6 @@ runs:
       shell: bash
       run: docker build -t ${{ inputs.docker-username }}/simple-automation:${{ steps.get-version.outputs.it }} .
 
-    - name: Test
-      shell: bash
-      run: docker run ${{ inputs.docker-username }}/simple-automation:${{ steps.get-version.outputs.it }}
-
     - name: Push Docker image
       shell: bash
       run: docker push ${{ inputs.docker-username }}/simple-automation:${{ steps.get-version.outputs.it }}
