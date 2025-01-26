@@ -38,4 +38,4 @@ jobs:
         run: terraform destroy -auto-approve
 
       - name: Delete resources from S3 bucket
-        run: aws s3 rm s3://simple-automation/automation
+        run: aws s3 rm s3://simple-automation/automation --recursive
