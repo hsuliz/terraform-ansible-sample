@@ -25,7 +25,7 @@ dependencies {
   testImplementation(libs.kotlin.test.junit)
 }
 
-ktor { fatJar { archiveFileName.set("web-server-$version-fat.jar") } }
+ktor { fatJar { archiveFileName.set("web-server.jar") } }
 
 //tasks.register<Task>("getVersion") {
 //  description = "Prints the current project version"
