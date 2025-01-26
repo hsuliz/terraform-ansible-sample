@@ -43,11 +43,6 @@ jobs:
         run: |
           docker pull hsuliz/simple-automation:${{ steps.get-latest-docker-image-tag.outputs.it }}
 
-      - name: Mock scan
-        shell: bash
-        run: |
-          echo "mock scan"
-
       - name: Increment version
         id: increment-version
         run: |
