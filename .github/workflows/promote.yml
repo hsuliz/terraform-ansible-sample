@@ -2,6 +2,17 @@ name: Promote
 
 on:
   workflow_dispatch:
+    inputs:
+      image_version:
+        required: true
+        description: Image version
+        type: string
+  workflow_call:
+    inputs:
+      image_version:
+        required: true
+        description: Image version
+        type: string
 
 jobs:
   Promote:
@@ -27,4 +38,4 @@ jobs:
 
       - name: Ansible playbook promote run
         working-directory: playbooks
-        run: ansible-playbook -i inventory promote.yml -e "image_version=0.0.4-515403c"
+        run: ansible-playbook -i inventory promote.yml -e "image_version=${{ inputs.image_version }}"
