@@ -66,6 +66,8 @@ jobs:
           commit_message: Version update to ${{ steps.increment-version.outputs.incremented-version }}
 
   promote:
+    needs: release
     uses: ./.github/workflows/promote.yml
+    secrets: inherit
     with:
       image_version: ${{ needs.release.outputs.incremented_version }}
