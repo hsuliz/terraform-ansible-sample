@@ -20,7 +20,7 @@ jobs:
     permissions:
       contents: write
     outputs:
-      incremented_version: ${{ steps.increment-version.outputs.incremented-version }}
+      incremented_version: ${{ steps.increment_version.outputs.incremented-version }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -46,7 +46,7 @@ jobs:
           docker pull hsuliz/simple-automation:${{ steps.get-latest-docker-image-tag.outputs.it }}
 
       - name: Increment version
-        id: increment-version
+        id: increment_version
         run: |
           NEW_VERSION=$(bash ./update_version.sh ${{ github.event.inputs.version }})
           echo "incremented-version=$NEW_VERSION" >> $GITHUB_OUTPUT
@@ -54,16 +54,16 @@ jobs:
       - name: Re-tag with new version
         shell: bash
         run: |
-          docker tag hsuliz/simple-automation:${{ steps.get-latest-docker-image-tag.outputs.it }} hsuliz/simple-automation:${{ steps.increment-version.outputs.incremented-version }}
+          docker tag hsuliz/simple-automation:${{ steps.get-latest-docker-image-tag.outputs.it }} hsuliz/simple-automation:${{ steps.increment_version.outputs.incremented-version }}
 
       - name: Push Docker image
         shell: bash
-        run: docker push hsuliz/simple-automation:${{ steps.increment-version.outputs.incremented-version }}
+        run: docker push hsuliz/simple-automation:${{ steps.increment_version.outputs.incremented-version }}
 
       - name: Commit updated version
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Version update to ${{ steps.increment-version.outputs.incremented-version }}
+          commit_message: Version update to ${{ steps.increment_version.outputs.incremented-version }}
 
   promote:
     needs: release

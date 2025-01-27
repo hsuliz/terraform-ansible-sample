@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
     - name: Get version
-      id: get-version
+      id: get_version
       shell: bash
       run: |
         version=$(awk -F'"' '/^version =/ {print $2}' build.gradle.kts)
@@ -29,8 +29,8 @@ runs:
 
     - name: Build Docker image
       shell: bash
-      run: docker build -t ${{ inputs.docker-username }}/simple-automation:${{ steps.get-version.outputs.it }} .
+      run: docker build -t hsuliz/simple-automation:${{ steps.get_version.outputs.it }} .
 
     - name: Push Docker image
       shell: bash
-      run: docker push ${{ inputs.docker-username }}/simple-automation:${{ steps.get-version.outputs.it }}
+      run: docker push hsuliz/simple-automation:${{ steps.get_version.outputs.it }}
