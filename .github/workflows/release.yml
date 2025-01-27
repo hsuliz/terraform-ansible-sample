@@ -14,11 +14,13 @@ on:
           - patch
 
 jobs:
-  Release:
+  release:
     if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      incremented_version: ${{ steps.increment-version.outputs.incremented-version }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -63,4 +65,7 @@ jobs:
         with:
           commit_message: Version update to ${{ steps.increment-version.outputs.incremented-version }}
 
-  Promote:
+  promote:
+    uses: .github/workflows/promote.yml
+    with:
+      image_version: ${{ needs.release.outputs.incremented_version }}
