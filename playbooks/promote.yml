@@ -1,0 +1,6 @@
+---
+- name: Promote
+  hosts: web_server
+  become: yes
+  roles:
+    - update_docker_container

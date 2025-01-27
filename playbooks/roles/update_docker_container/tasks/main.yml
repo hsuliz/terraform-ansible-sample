@@ -1,0 +1,39 @@
+---
+- name: Pull Docker Image
+  docker_image:
+    name: hsuliz/simple-automation
+    source: pull
+    tag: "{{ image_version }}"
+
+- name: Start the Green container on an alternate port
+  docker_container:
+    name: web_server_green
+    image: hsuliz/simple-automation:{{ image_version }}
+    state: started
+    published_ports:
+      - "8081:8080"
+
+- name: Verify the Green container is healthy
+  uri:
+    url: http://localhost:8081
+    method: GET
+    return_content: yes
+    status_code: 200
+  register: green_health
+  retries: 5
+  delay: 10
+  until: green_health.status == 200
+
+- name: Switch traffic to Green container by recreating Blue with Green settings
+  docker_container:
+    name: web_server
+    image: hsuliz/simple-automation:{{ image_version }}
+    state: started
+    published_ports:
+      - "80:8080"
+
+- name: Stop and remove the previous Blue container (if exists)
+  docker_container:
+    name: web_server_green
+    state: absent
+

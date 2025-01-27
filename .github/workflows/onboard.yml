@@ -45,7 +45,7 @@ jobs:
           mv terraform/oei-key-pair.pem playbooks/oei-key-pair.pem
           chmod 400 "playbooks/oei-key-pair.pem"
 
-      - name: Ansible playbook
+      - name: Ansible playbook configure run
         working-directory: ./playbooks
         run: ansible-playbook -i inventory configure.yml
 
