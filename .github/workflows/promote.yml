@@ -1,0 +1,41 @@
+name: Promote
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_version:
+        required: true
+        description: Image version
+        type: string
+  workflow_call:
+    inputs:
+      image_version:
+        required: true
+        description: Image version
+        type: string
+
+jobs:
+  promote:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Configure aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Get resources from S3 bucket
+        working-directory: ./playbooks
+        run: |
+          aws s3 cp s3://terraform-ansible-sample/automation/ansible/inventory . 
+          aws s3 cp s3://terraform-ansible-sample/automation/oei-key-pair.pem .
+          chmod 400 "oei-key-pair.pem"
+
+      - name: Ansible playbook promote run
+        working-directory: ./playbooks
+        run: ansible-playbook -i inventory promote.yml -e "image_version=${{ inputs.image_version }}"
