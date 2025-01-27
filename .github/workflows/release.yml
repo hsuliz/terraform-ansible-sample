@@ -66,6 +66,6 @@ jobs:
           commit_message: Version update to ${{ steps.increment-version.outputs.incremented-version }}
 
   promote:
-    uses: .github/workflows/promote.yml
+    uses: ./.github/workflows/promote.yml
     with:
       image_version: ${{ needs.release.outputs.incremented_version }}
