@@ -32,8 +32,8 @@ jobs:
       - name: Get resources from S3 bucket
         working-directory: ./playbooks
         run: |
-          aws s3 cp s3://simple-automation/automation/ansible/inventory . 
-          aws s3 cp s3://simple-automation/automation/oei-key-pair.pem .
+          aws s3 cp s3://terraform-ansible-sample/automation/ansible/inventory . 
+          aws s3 cp s3://terraform-ansible-sample/automation/oei-key-pair.pem .
           chmod 400 "oei-key-pair.pem"
 
       - name: Ansible playbook promote run

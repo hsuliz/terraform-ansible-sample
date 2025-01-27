@@ -29,7 +29,7 @@ jobs:
         working-directory: ./terraform
         run: |
           terraform init \
-            -backend-config="bucket=simple-automation" \
+            -backend-config="bucket=terraform-ansible-sample" \
             -backend-config="key=automation/terraform/terraform.tfstate" \
             -backend-config="region=${{ secrets.AWS_REGION }}"
 
@@ -38,4 +38,4 @@ jobs:
         run: terraform destroy -auto-approve
 
       - name: Delete resources from S3 bucket
-        run: aws s3 rm s3://simple-automation/automation --recursive
+        run: aws s3 rm s3://terraform-ansible-sample/automation --recursive

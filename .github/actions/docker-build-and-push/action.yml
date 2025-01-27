@@ -29,8 +29,8 @@ runs:
 
     - name: Build Docker image
       shell: bash
-      run: docker build -t hsuliz/simple-automation:${{ steps.get_version.outputs.it }} .
+      run: docker build -t hsuliz/terraform-ansible-sample:${{ steps.get_version.outputs.it }} .
 
     - name: Push Docker image
       shell: bash
-      run: docker push hsuliz/simple-automation:${{ steps.get_version.outputs.it }}
+      run: docker push hsuliz/terraform-ansible-sample:${{ steps.get_version.outputs.it }}

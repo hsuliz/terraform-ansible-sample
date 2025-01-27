@@ -35,7 +35,7 @@ jobs:
         id: get-latest-docker-image-tag
         shell: bash
         run: |
-          URL="https://registry.hub.docker.com/v2/repositories/hsuliz/simple-automation/tags"
+          URL="https://registry.hub.docker.com/v2/repositories/hsuliz/terraform-ansible-sample/tags"
           RESPONSE=$(curl -s "$URL")
           IMAGE_TAG=$(echo "$RESPONSE" | jq -r '.results[0].name')
           echo "it=$IMAGE_TAG" >> $GITHUB_OUTPUT
@@ -43,7 +43,7 @@ jobs:
       - name: Get latest Docker image
         shell: bash
         run: |
-          docker pull hsuliz/simple-automation:${{ steps.get-latest-docker-image-tag.outputs.it }}
+          docker pull hsuliz/terraform-ansible-sample:${{ steps.get-latest-docker-image-tag.outputs.it }}
 
       - name: Increment version
         id: increment_version
@@ -54,11 +54,11 @@ jobs:
       - name: Re-tag with new version
         shell: bash
         run: |
-          docker tag hsuliz/simple-automation:${{ steps.get-latest-docker-image-tag.outputs.it }} hsuliz/simple-automation:${{ steps.increment_version.outputs.incremented-version }}
+          docker tag hsuliz/terraform-ansible-sample:${{ steps.get-latest-docker-image-tag.outputs.it }} hsuliz/terraform-ansible-sample:${{ steps.increment_version.outputs.incremented-version }}
 
       - name: Push Docker image
         shell: bash
-        run: docker push hsuliz/simple-automation:${{ steps.increment_version.outputs.incremented-version }}
+        run: docker push hsuliz/terraform-ansible-sample:${{ steps.increment_version.outputs.incremented-version }}
 
       - name: Commit updated version
         uses: stefanzweifel/git-auto-commit-action@v5

@@ -29,7 +29,7 @@ jobs:
         working-directory: ./terraform
         run: |
           terraform init \
-            -backend-config="bucket=simple-automation" \
+            -backend-config="bucket=terraform-ansible-sample" \
             -backend-config="key=automation/terraform/terraform.tfstate" \
             -backend-config="region=${{ secrets.AWS_REGION }}"
 
@@ -51,5 +51,5 @@ jobs:
 
       - name: Save resources to S3 bucket
         run: |
-          aws s3 cp ./playbooks/inventory s3://simple-automation/automation/ansible/inventory
-          aws s3 cp ./playbooks/oei-key-pair.pem s3://simple-automation/automation/oei-key-pair.pem
+          aws s3 cp ./playbooks/inventory s3://terraform-ansible-sample/automation/ansible/inventory
+          aws s3 cp ./playbooks/oei-key-pair.pem s3://terraform-ansible-sample/automation/oei-key-pair.pem
