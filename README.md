@@ -3,8 +3,11 @@
 # Read me
 
 Example CI/CD of using AWS, Terraform, Ansible and GitHub Actions to automate:
+
 - Build, run tests, lint and pushes to Docker Hub if on main branch
 - Onboard, which creates infrastructure for us
 - Destroy, destroys infrastructure
 - Promote, promotes new Image to existing infrastructure
 - Release, releasing new version based on input
+
+User still needs to create bucket in AWS for Terraform state, private SSH key and Ansible inventory.
