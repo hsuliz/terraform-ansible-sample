@@ -7,11 +7,20 @@ on:
         required: true
         description: Image version
         type: string
+      ssh_private_key_name:
+        required: false
+        default: private_key.pem
+        description: Private key name
   workflow_call:
     inputs:
       image_version:
         required: true
         description: Image version
+        type: string
+      ssh_private_key_name:
+        required: false
+        default: private_key.pem
+        description: Private key name
         type: string
 
 jobs:
