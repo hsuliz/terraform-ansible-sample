@@ -33,8 +33,8 @@ jobs:
         working-directory: ./playbooks
         run: |
           aws s3 cp s3://terraform-ansible-sample/automation/ansible/inventory . 
-          aws s3 cp s3://terraform-ansible-sample/automation/oei-key-pair.pem .
-          chmod 400 "oei-key-pair.pem"
+          aws s3 cp s3://terraform-ansible-sample/automation/${{ inputs.ssh_private_key_name }} .
+          chmod 400 "${{ inputs.ssh_private_key_name }}"
 
       - name: Ansible playbook promote run
         working-directory: ./playbooks

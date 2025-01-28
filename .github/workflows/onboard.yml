@@ -2,6 +2,11 @@ name: Onboard
 
 on:
   workflow_dispatch:
+    inputs:
+      ssh_private_key_name:
+        required: false
+        default: private_key.pem
+        description: Private key name
 
 jobs:
   Onboard:
@@ -42,8 +47,8 @@ jobs:
 
       - name: Add ssh key to Ansible playbooks
         run: |
-          mv ./terraform/oei-key-pair.pem ./playbooks/oei-key-pair.pem
-          chmod 400 "./playbooks/oei-key-pair.pem"
+          mv ./terraform/${{ inputs.ssh_private_key_name }} ./playbooks/${{ inputs.ssh_private_key_name }}
+          chmod 400 "./playbooks/${{ inputs.ssh_private_key_name }}"
 
       - name: Ansible playbook configure run
         working-directory: ./playbooks
@@ -52,4 +57,4 @@ jobs:
       - name: Save resources to S3 bucket
         run: |
           aws s3 cp ./playbooks/inventory s3://terraform-ansible-sample/automation/ansible/inventory
-          aws s3 cp ./playbooks/oei-key-pair.pem s3://terraform-ansible-sample/automation/oei-key-pair.pem
+          aws s3 cp ./playbooks/${{ inputs.ssh_private_key_name }} s3://terraform-ansible-sample/automation/${{ inputs.ssh_private_key_name }}
