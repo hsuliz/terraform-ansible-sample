@@ -20,7 +20,7 @@ jobs:
     permissions:
       contents: write
     outputs:
-      incremented_version: ${{ steps.increment_version.outputs.incremented-version }}
+      incremented_version: ${{ steps.increment_version.outputs.incremented_version }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -32,38 +32,39 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Get latest Docker image tag
-        id: get-latest-docker-image-tag
+        id: get_latest_docker_image_tag
         shell: bash
         run: |
           URL="https://registry.hub.docker.com/v2/repositories/hsuliz/terraform-ansible-sample/tags"
           RESPONSE=$(curl -s "$URL")
           IMAGE_TAG=$(echo "$RESPONSE" | jq -r '.results[0].name')
-          echo "it=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "latest_docker_image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Get latest Docker image
         shell: bash
         run: |
-          docker pull hsuliz/terraform-ansible-sample:${{ steps.get-latest-docker-image-tag.outputs.it }}
+          docker pull hsuliz/terraform-ansible-sample:${{ steps.get_latest_docker_image_tag.outputs.latest_docker_image_tag }}
 
       - name: Increment version
         id: increment_version
         run: |
           NEW_VERSION=$(bash ./update_version.sh ${{ github.event.inputs.version }})
-          echo "incremented-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "incremented_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Re-tag with new version
         shell: bash
         run: |
-          docker tag hsuliz/terraform-ansible-sample:${{ steps.get-latest-docker-image-tag.outputs.it }} hsuliz/terraform-ansible-sample:${{ steps.increment_version.outputs.incremented-version }}
+          docker tag hsuliz/terraform-ansible-sample:${{ steps.get_latest_docker_image_tag.outputs.latest_docker_image_tag }} \
+            hsuliz/terraform-ansible-sample:${{ steps.increment_version.outputs.incremented_version }}
 
       - name: Push Docker image
         shell: bash
-        run: docker push hsuliz/terraform-ansible-sample:${{ steps.increment_version.outputs.incremented-version }}
+        run: docker push hsuliz/terraform-ansible-sample:${{ steps.increment_version.outputs.incremented_version }}
 
       - name: Commit updated version
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Version update to ${{ steps.increment_version.outputs.incremented-version }}
+          commit_message: Version update to ${{ steps.increment_version.outputs.incremented_version }}
 
   promote:
     needs: release
